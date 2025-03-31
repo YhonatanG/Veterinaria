@@ -275,9 +275,6 @@ def avisos():
     if 'user' not in session:
         return redirect(url_for('login'))
     return render_template('avisos.html')
- 
-if __name__ == '__main__':
-    app.run(debug=True)
 
 # Configurar el puerto dinámico de Render
 if __name__ == "__main__":
