@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Mascota</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffcccb;zz
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+        .left-panel {
+            background: red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40%;
+            padding: 20px;
+        }
+        .logo img {
+            width: 150px;
+        }
+        .right-panel {
+            width: 60%;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        input {
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: darkred;
+        }
+        .message {
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: green;
+        }
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .buttons a {
+            padding: 10px;
+            background: red;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+            display: inline-block;
+        }
+        .buttons a:hover {
+            background: darkred;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='paw-heart.png') }}" alt="Logo">
+            </div>
+        </div>
+        <div class="right-panel">
+            <h2>Registrar Nueva Mascota</h2>
+
+            {% if mensaje %}
+                <p class="message">{{ mensaje }}</p>
+
+            {% else %}
+                <form method="POST">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" required>
+
+                    <label for="especie">Especie:</label>
+                    <input type="text" id="especie" name="especie" required>
+
+                    <label for="raza">Raza:</label>
+                    <input type="text" id="raza" name="raza" required>
+
+                    <label for="color">Color:</label>
+                    <input type="text" id="color" name="color" required>
+
+                    <label for="tamano">Tamaño:</label>
+                    <input type="text" id="tamano" name="tamano" required>
+
+                    <label for="nacimiento">Año de Nacimiento:</label>
+                    <input type="number" id="nacimiento" name="nacimiento" required>
+
+                    <button type="submit">Registrar Mascota</button>
+                </form>
+            {% endif %}
+
+            <!-- Botones para navegar con el mismo estilo -->
+            <div class="buttons">
+                <a href="{{ url_for('menu') }}">Volver al Menú</a>
+                <a href="{{ url_for('ver_mascotas') }}">Ver Mascotas Registradas</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

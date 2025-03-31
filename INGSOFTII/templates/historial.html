@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial Clínico | Clínica Veterinaria</title>
+    <style>
+        /* Estilos Generales */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Contenedor */
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        /* Tabla */
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .styled-table th, .styled-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .styled-table th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .styled-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .no-data {
+            color: #ff6b6b;
+            font-weight: bold;
+            padding: 15px;
+        }
+
+        /* Botón */
+        .button-group {
+            margin-top: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .button:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Historial Clínico de Todas las Mascotas</h1>
+
+        {% for mascota in mascotas %}
+        <h2>{{ mascota.nombre }} ({{ mascota.especie }})</h2>
+        
+        <h3>Historial Clínico</h3>
+        <ul>
+            {% for entrada in historial %}
+                {% if entrada.mascota_id == mascota.id %}
+                    <li><strong>{{ entrada.fecha }}:</strong> {{ entrada.descripcion }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    
+        <h3>Citas Agendadas</h3>
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Estado</th>
+                    <th>Servicio</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cita in citas %}
+                    {% if cita.mascota_id == mascota.id %}
+                        <tr>
+                            <td>{{ cita.fecha }}</td>
+                            <td>{{ cita.hora }}</td>
+                            <td>{{ cita.estado }}</td>
+                            <td>{{ servicios[cita.servicio_id] if cita.servicio_id in servicios else "Desconocido" }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+
+
+        <div class="button-group">
+            <a href="{{ url_for('ver_mascotas') }}" class="button">Volver a Mascotas</a>
+            <a href="{{ url_for('menu') }}" class="button">Volver al Menú</a>
+        </div>
+    </div>
+</body>
+</html>

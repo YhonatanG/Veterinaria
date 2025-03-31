@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Cita</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffcccb;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+            text-align: left;
+        }
+        select, input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background: darkred;
+        }
+        .button-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: white;
+            background: red;
+            padding: 8px 12px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .button-link:hover {
+            background: darkred;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Agendar Cita Veterinaria</h2>
+
+        <!-- Mensaje de error si no hay mascotas registradas -->
+        {% if not mascotas %}
+            <p style="color: red;">No tienes mascotas registradas. Registra una mascota antes de agendar una cita.</p>
+        {% else %}
+        <form action="{{ url_for('agendar_cita') }}" method="POST">
+            
+            <label for="mascota">Selecciona tu mascota:</label>
+            <select name="mascota" id="mascota" required>
+                {% for mascota in mascotas %}
+                    <option value="{{ mascota.id }}">{{ mascota.nombre }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="fecha">Selecciona la fecha:</label>
+            <input type="date" id="fecha" name="fecha" required>
+
+            <label for="hora">Selecciona la hora:</label>
+            <input type="time" id="hora" name="hora" required>
+
+            <label for="servicio_id">Selecciona un servicio:</label>
+            <select name="servicio_id" id="servicio_id" required>
+                {% if servicios %}
+                    {% for servicio in servicios %}
+                        <option value="{{ servicio.id }}">{{ servicio.nombre }}</option>
+                    {% endfor %}
+                {% else %}
+                    <option value="" disabled>No hay servicios disponibles</option>
+                {% endif %}
+            </select>
+
+            <button type="submit">Agendar Cita</button>
+        </form>
+        {% endif %}
+
+        <a href="{{ url_for('menu') }}" class="button-link">Volver al Menú</a>
+    </div>
+</body>
+</html>

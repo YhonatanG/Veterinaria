@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facturación | Clínica Veterinaria</title>
+    <style>
+        /* Estilos Generales */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffcccb;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Contenedor Principal */
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        /* Encabezado */
+        h1 {
+            color: #000000;
+        }
+
+        /* Tabla de Facturación */
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .styled-table th, .styled-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .styled-table th {
+            background-color: #ff0000;
+            color: white;
+        }
+
+        .styled-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Mensaje de No Facturas */
+        .no-data {
+            color: #000000;
+            font-weight: bold;
+            padding: 15px;
+        }
+
+        /* Botón de Regreso */
+        .button-group {
+            margin-top: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            background: #ff0303;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .button:hover {
+            background: darkred;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Facturación de Servicios</h1>
+        </header>
+
+        <section class="content">
+            {% if facturas %}
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>ID Factura</th>
+                            <th>Fecha</th>
+                            <th>Mascota</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for factura in facturas %}
+                            <tr>
+                                <td>{{ factura.id }}</td>
+                                <td>{{ factura.fecha }}</td>
+                                <td>{{ factura.mascota_nombre }}</td>
+                                <td>${{ factura.total }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="no-data">No hay facturas generadas.</p>
+            {% endif %}
+        </section>
+
+        <div class="button-group">
+            <a href="{{ url_for('menu') }}" class="button">Volver al Menú</a>
+        </div>
+    </div>
+</body>
+</html>

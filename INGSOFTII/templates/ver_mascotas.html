@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Mascotas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffcccb;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background: red;
+            color: white;
+        }
+        .button {
+            padding: 8px 12px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .button:hover {
+            background: darkred;
+        }
+        .delete {
+            background: darkred;
+        }
+        .empty-message {
+            font-size: 18px;
+            color: #555;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mis Mascotas</h1>
+
+        {% if mascotas %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Especie</th>
+                        <th>Raza</th>
+                        <th>Color</th>
+                        <th>Tamaño</th>
+                        <th>Año de Nacimiento</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mascota in mascotas %}
+                        <tr>
+                            <td>{{ mascota.nombre }}</td>
+                            <td>{{ mascota.especie }}</td>
+                            <td>{{ mascota.raza }}</td>
+                            <td>{{ mascota.color }}</td>
+                            <td>{{ mascota.tamano }}</td>
+                            <td>{{ mascota.anio_nacimiento }}</td>
+                            <td>
+                                <a href="{{ url_for('eliminar_mascota_view', mascota_id=mascota.id) }}" 
+                                   class="button delete"
+                                   onclick="return confirm('¿Estás seguro de que quieres eliminar esta mascota?');">
+                                    Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="empty-message">No hay mascotas registradas.</p>
+        {% endif %}
+
+        <a href="{{ url_for('menu') }}" class="button">Volver al Menú</a>
+    </div>
+</body>
+</html>
