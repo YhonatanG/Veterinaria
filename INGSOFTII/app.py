@@ -279,4 +279,7 @@ def avisos():
 if __name__ == '__main__':
     app.run(debug=True)
 
-app.run(host="0.0.0.0", port=10000)
+# Configurar el puerto dinámico de Render
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))  # Usar el puerto de Render o 10000 por defecto
+    app.run(host="0.0.0.0", port=port)
