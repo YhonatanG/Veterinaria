@@ -4,97 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historial Clínico | Clínica Veterinaria</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
-        /* Estilos Generales */
         body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #ffcccb;
             font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
             margin: 0;
-            padding: 0;
+            overflow: auto;
         }
-
-        /* Contenedor */
         .container {
-            width: 80%;
-            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
             padding: 20px;
-            background: white;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
             text-align: center;
+            min-height: 80vh;
         }
-
-        h1 {
-            color: #2c3e50;
+        h2 {
+            margin-bottom: 15px;
+            color: red;
+            padding-top: 20px;
         }
-
-        /* Tabla */
-        .styled-table {
+        h3 {
+            text-align: left;
+            margin-top: 15px;
+            color: #333;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+        ul li {
+            background: #f2f2f2;
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 10px;
         }
-
-        .styled-table th, .styled-table td {
+        th, td {
             border: 1px solid #ddd;
             padding: 10px;
             text-align: center;
         }
-
-        .styled-table th {
-            background-color: #4CAF50;
+        th {
+            background-color: red;
             color: white;
         }
-
-        .styled-table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        .no-data {
-            color: #ff6b6b;
-            font-weight: bold;
-            padding: 15px;
-        }
-
-        /* Botón */
         .button-group {
             margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
         }
-
-        .button {
+        .button-link {
             display: inline-block;
-            padding: 10px 20px;
-            margin: 5px;
-            background: #3498db;
             color: white;
+            background: red;
+            padding: 10px 15px;
             text-decoration: none;
             border-radius: 5px;
-            transition: 0.3s;
+            transition: background 0.3s;
         }
-
-        .button:hover {
-            background: #2980b9;
+        .button-link:hover {
+            background: darkred;
+        }
+        .separator {
+            border-top: 1px solid #ddd;
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Historial Clínico de Todas las Mascotas</h1>
-
+        <h2>Historial Clínico de Mascotas</h2>
         {% for mascota in mascotas %}
-        <h2>{{ mascota.nombre }} ({{ mascota.especie }})</h2>
-        
-        <h3>Historial Clínico</h3>
+        <h3>Citas Agendadas para {{ mascota.nombre }} ({{ mascota.especie }})</h3>
         <ul>
-            {% for entrada in historial %}
-                {% if entrada.mascota_id == mascota.id %}
-                    <li><strong>{{ entrada.fecha }}:</strong> {{ entrada.descripcion }}</li>
-                {% endif %}
+            {% for entrada in historial if entrada.mascota_id == mascota.id %}
+                <li><strong>{{ entrada.fecha }}:</strong> {{ entrada.descripcion }}</li>
             {% endfor %}
         </ul>
-    
-        <h3>Citas Agendadas</h3>
-        <table class="styled-table">
+        <table>
             <thead>
                 <tr>
                     <th>Fecha</th>
@@ -104,24 +107,28 @@
                 </tr>
             </thead>
             <tbody>
-                {% for cita in citas %}
-                    {% if cita.mascota_id == mascota.id %}
-                        <tr>
-                            <td>{{ cita.fecha }}</td>
-                            <td>{{ cita.hora }}</td>
-                            <td>{{ cita.estado }}</td>
-                            <td>{{ servicios[cita.servicio_id] if cita.servicio_id in servicios else "Desconocido" }}</td>
-                        </tr>
-                    {% endif %}
+                {% set citas_mascota = [] %}
+                {% for cita in citas if cita.mascota_id == mascota.id %}
+                    {% set _ = citas_mascota.append(cita) %}
+                    <tr>
+                        <td>{{ cita.fecha }}</td>
+                        <td>{{ cita.hora }}</td>
+                        <td>{{ cita.estado }}</td>
+                        <td>{{ servicios.get(cita.servicio_id, "Desconocido") }}</td>
+                    </tr>
                 {% endfor %}
+                {% if not citas_mascota %}
+                    <tr>
+                        <td colspan="4">No se encuentran registros de citas</td>
+                    </tr>
+                {% endif %}
             </tbody>
         </table>
-    {% endfor %}
-
-
+        <div class="separator"></div>
+        {% endfor %}
         <div class="button-group">
-            <a href="{{ url_for('ver_mascotas') }}" class="button">Volver a Mascotas</a>
-            <a href="{{ url_for('menu') }}" class="button">Volver al Menú</a>
+            <a href="{{ url_for('ver_mascotas') }}" class="button-link">Volver a Mascotas</a>
+            <a href="{{ url_for('menu') }}" class="button-link">Volver al Menú</a>
         </div>
     </div>
 </body>
